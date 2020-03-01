@@ -1,2 +1,0 @@
-Your new account is locked with a password. Please give a password. Do not forget this password.
-Fatal: Failed to read password: liner: function not supported in this terminal
