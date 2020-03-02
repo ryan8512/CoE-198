@@ -33,11 +33,9 @@ class App extends Component {
     this.setState({ account: accounts[0] })
     const networkId = await web3.eth.net.getId()
     const networkData = Registration.networks[networkId]
-    
     if(networkData) {
       const registration = new web3.eth.Contract(Registration.abi, networkData.address)
       this.setState({ registration })
-      
       const voteCount = await registration.methods.voteCount().call()
       console.log(voteCount);
       this.setState({ voteCount })
