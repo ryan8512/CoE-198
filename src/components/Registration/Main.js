@@ -6,6 +6,7 @@ class Main extends Component {
     return (
       <div id="content">
         <h1>Register Voter</h1>
+
         <form onSubmit={(event) => {
           event.preventDefault()
           const concat = this.firstName.value + this.lastName.value + this.address.value
@@ -50,6 +51,7 @@ class Main extends Component {
           </div>
           <button type="submit" className="btn btn-primary">Register Voter</button>
         </form>
+        
         <p>&nbsp;</p>
         <h2>Voting List</h2>
         <table className="table">

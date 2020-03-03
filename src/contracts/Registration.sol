@@ -1,5 +1,5 @@
 //pragma solidity ^0.5.0;
-pragma solidity >=0.4.22 <0.6.0;
+pragma solidity ^0.6.1;
 
 contract Registration{
     string public name;
@@ -11,18 +11,15 @@ contract Registration{
         string publicKey;
         bool canVote;
     }
-    
     event VoterRegistered(
         uint id,
         string publicKey,
         bool canVote
     );
-    
     constructor() public{
         name = "Registration Blockchain";
-        timelimit = block.timestamp + 86400;// one day  
+        timelimit = block.timestamp + 86400; // one day
     }
-    
     function registerVoter(string memory _credentials, string memory _publicKey) public{
         assert(bytes(_publicKey).length == 128);
         if(voters[_credentials].canVote != true && block.timestamp < timelimit){
@@ -34,9 +31,7 @@ contract Registration{
             emit VoterRegistered(voteCount,_credentials,true);
         }
     }
-    
     function votingStatus(string memory _credentials) public view returns (bool _votestatus){
         return voters[_credentials].canVote;
     }
-    
 }
