@@ -1,56 +1,70 @@
-import React from 'react';
+import React, {useState} from 'react';
+import {
+  Collapse,
+  Button,
+  Modal, 
+  ModalHeader, 
+  ModalBody, 
+  ModalFooter,
+  Navbar,
+  Media,
+  NavbarToggler,
+  NavbarBrand,
+  Nav,
+  NavItem,
+  NavLink,
+} from 'reactstrap';
+
+import { Link } from 'react-router-dom';
  
-import { NavLink } from 'react-router-dom';
- 
-const Navigation = () => {
+const Navigation = (props) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const nav_toggle = () => setIsOpen(!isOpen);
+
+  const [modal, setModal] = useState(false);
+  const modal_toggle = () => setModal(!modal);
+
     return (
        <div>
-          <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <NavLink class="navbar-brand" to="/">
-                <img src={require("./img/navbar_Logo.jpg")} width="30" height="30" class="d-inline-block align-top" alt=""/>
-                Halalan PH
-            </NavLink>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-              <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-               <ul class="navbar-nav mr-auto">
-                   <NavLink class="nav-item active nav-link" to="/">Home <span class="sr-only">(current)</span></NavLink>
-                   <NavLink class="nav-item nav-link" to="/overview">Overview</NavLink>
-                   <NavLink class="nav-item nav-link" to="/support">Support</NavLink>
-                   <NavLink class="nav-item nav-link" to="/authors">About Us</NavLink>
-               </ul>
-            </div>
-            <ul class="navbar-nav ml-auto">
-                <NavLink class="nav-item nav-link" to="/registration">Sign Up</NavLink>
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-                    Login
-                </button>
-                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <h5 class="modal-title" id="exampleModalLabel">Log In</h5>
-                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                          </button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="form-group">
-                                <label for="exampleInputEmail1">Digital Signature </label>
-                                <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter address"/>
-                              </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-link mr-auto">Forgot your password?</button>
-                            <button type="button" class="btn btn-primary">Log In</button>
-                        </div>
-                      </div>
-                    </div>
-                </div>
-            </ul>
-          </nav>
+          <Navbar color="navbar-light" light expand="md">
+          <Media width="30" height="30" src={require("./img/navbar_Logo.jpg")}/>
+            <NavbarBrand href="/">Halalan PH</NavbarBrand>
+            <NavbarToggler onClick={nav_toggle} />
+            <Collapse isOpen={isOpen} navbar>
+              <Nav className="mr-auto" navbar>
+                <NavItem>
+                  <NavLink tag={Link} to="/">Home</NavLink>
+                </NavItem>
+                <NavItem>
+                  <NavLink tag={Link} to="/overview">Overview</NavLink>
+                </NavItem>
+                <NavItem>
+                  <NavLink tag={Link} to="/support">Support</NavLink>
+                </NavItem>
+                <NavItem>
+                  <NavLink tag={Link} to="/authors">About Us</NavLink>
+                </NavItem>
+              </Nav>
+              <Nav className="ml-auto" navbar>
+              <NavItem>
+                  <NavLink tag={Link} to="/registration">Sign Up</NavLink>
+              </NavItem>
+              <NavItem>
+                  <Button color="primary" onClick={modal_toggle}> Log In</Button>
+              </NavItem>
+              </Nav>
+            </Collapse>
+          </Navbar>
+          <Modal isOpen={modal} toggle={modal_toggle}>
+            <ModalHeader toggle={modal_toggle}>Login</ModalHeader>
+            <ModalBody>
+              Hello
+            </ModalBody>
+            <ModalFooter>
+              <Button color="primary" onClick={modal_toggle}>Login</Button>{' '}
+              <Button color="secondary" onClick={modal_toggle}>Cancel</Button>
+            </ModalFooter>
+          </Modal>
        </div>
     );
 }
