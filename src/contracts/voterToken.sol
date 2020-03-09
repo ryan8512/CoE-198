@@ -11,6 +11,7 @@ contract voterToken{
         name = _name;
         symbol = _symbol;
         totalVote = _totalVote;
+        balance[msg.sender] = _totalVote;
     }
     
     function balanceOf(address _owner) view public returns (uint256){
