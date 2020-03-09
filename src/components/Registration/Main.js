@@ -32,20 +32,19 @@ class Main extends Component {
             <Input
               id="firstName"
               type="text"
-              ref={(input) => { this.firstName = input }}
+              innerRef={(input) => { this.firstName = input }}
               className="form-control"
               placeholder="First Name"
-              className = "col-4"
+              className = "col-6"
               required />
-            
-            
+
               <Input
               id="lastName"
               type="text"
-              ref={(input) => { this.lastName = input }}
+              innerRef={(input) => { this.lastName = input }}
               className="form-control"
               placeholder="Last Name"
-              className = "col-4"
+              className = "col-6"
               required />
               </Row>
           </FormGroup>
@@ -55,7 +54,7 @@ class Main extends Component {
             <Input
               id="address"
               type="select"
-              ref={(input) => { this.address = input }}
+              innerRef={(input) => { this.address = input }}
               className="form-control"
               placeholder="Address"
               required>
@@ -71,7 +70,7 @@ class Main extends Component {
             <Input
               id="public_address"
               type="select"
-              ref={(input) => { this.voter = input }}
+              innerRef={(input) => { this.voter = input }}
               className="form-control"
               placeholder="Public Key"
               required>
