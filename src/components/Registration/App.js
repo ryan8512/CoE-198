@@ -84,13 +84,13 @@ class App extends Component {
   render() {
     return (
       <div>
-        <Navbar account={this.state.account} />
-        <div className="container-fluid mt-5">
+        <div className="container-fluid mt-2">
           <div className="row">
-            <main role="main" className="col-lg-12 d-flex">
+            <main role="main" className="col-lg-12">
               { this.state.loading
                 ? <div id="loader" className="text-center"><p className="text-center">Loading...</p></div>
                 : <Main
+                  account={this.state.account}
                   votinglist={this.state.votinglist}
                   registerVoter={this.registerVoter}
                  />

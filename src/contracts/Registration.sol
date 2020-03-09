@@ -1,5 +1,5 @@
 //pragma solidity ^0.5.0;
-pragma solidity ^0.6.1;
+pragma solidity ^0.5.0;
 
 contract Registration{
     string public name;

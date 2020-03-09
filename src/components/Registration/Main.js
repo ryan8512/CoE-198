@@ -1,58 +1,104 @@
 import React, { Component } from 'react';
+import {
+  Jumbotron,
+  Button, 
+  Form, 
+  FormGroup, 
+  Label, 
+  Input, 
+  FormText,
+  Row
+} from 'reactstrap';
 
 class Main extends Component {
 
   render() {
     return (
-      <div id="content">
-        <h1>Register Voter</h1>
+      <div>
+        <Jumbotron class="jumbotron-fluid">
+            <h1 class="display-4">Sign Up</h1>
+            <p class="lead">Fast and Easy</p>
+        </Jumbotron>
 
-        <form onSubmit={(event) => {
+        <Form onSubmit={(event) => {
           event.preventDefault()
           const concat = this.firstName.value + this.lastName.value + this.address.value
           const publicKey = this.voter.value
           this.props.registerVoter(concat,publicKey)
         }}>
-          <div className="form-group mr-sm-2">
-            <input
+          <FormGroup>
+            <Label className="h5" for="firstName">Complete Name</Label>
+            <Row className="px-5">
+            <Input
               id="firstName"
               type="text"
               ref={(input) => { this.firstName = input }}
               className="form-control"
               placeholder="First Name"
+              className = "col-4"
               required />
-          </div>
-          <div className="form-group mr-sm-2">
-            <input
+            
+            
+              <Input
               id="lastName"
               type="text"
               ref={(input) => { this.lastName = input }}
               className="form-control"
-              placeholder="LastName"
+              placeholder="Last Name"
+              className = "col-4"
               required />
-          </div>
-          <div className="form-group mr-sm-2">
-            <input
+              </Row>
+          </FormGroup>
+          <FormGroup>
+            <Label className="h5" for="address">Address</Label>
+            <Row className="px-5">
+            <Input
               id="address"
-              type="text"
+              type="select"
               ref={(input) => { this.address = input }}
               className="form-control"
-              placeholder="address"
-              required />
-          </div>
-          <div className="form-group mr-sm-2">
-            <input
-              id="voter"
-              type="text"
+              placeholder="Address"
+              required>
+              <option selected>Choose...</option>
+              <option>NCR</option>
+              <option>Region I</option>
+              </Input>
+              </Row>
+          </FormGroup>
+          <FormGroup>
+            <Label className="h5" for="public_address">Credentials</Label>
+            <Row className="px-5">
+            <Input
+              id="public_address"
+              type="select"
               ref={(input) => { this.voter = input }}
               className="form-control"
-              placeholder="Voter Credentials (publicKey)"
-              required />
+              placeholder="Public Key"
+              required>
+              <option selected>Choose...</option>
+              <option>{this.props.account}</option>
+            </Input>
+              <FormText color="muted">
+                Please do not forget your private key, or the key provided by Metamask
+              </FormText>
+              </Row>
+              
+          </FormGroup>
+          <div class="text-center">
+            <Button className="col-4 mx-5" type="clear" color="secondary">Clear</Button>
+            <Button className="col-4 mx-5" type="submit" color="primary">Register Voter</Button>
           </div>
-          <button type="submit" className="btn btn-primary">Register Voter</button>
-        </form>
+        </Form>
         
-        <p>&nbsp;</p>
+      </div>
+    );
+  }
+}
+
+export default Main;
+
+/* Dating Table */
+/*<p>&nbsp;</p>
         <h2>Voting List</h2>
         <table className="table">
           <thead>
@@ -70,9 +116,4 @@ class Main extends Component {
             })}
           </tbody>
         </table>
-      </div>
-    );
-  }
-}
-
-export default Main;
+        */
