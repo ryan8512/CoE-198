@@ -9,6 +9,7 @@ import Overview from './Ubiqutous/Overview';
 import Authors from './Ubiqutous/Authors';
 import Support from './Ubiqutous/Support';
 import App from './Registration/App';
+import Track from './Ubiqutous/Track'
  
 class Router extends Component {
   render() {
@@ -22,6 +23,7 @@ class Router extends Component {
              <Route path="/authors" component={Authors}/>
              <Route path="/support" component={Support}/>
              <Route path="/registration" component={App}/>
+             <Route path="/track" component={Track}/>
             <Route component={Error}/>
            </Switch>
           <Footer />

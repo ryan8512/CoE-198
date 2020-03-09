@@ -95,24 +95,3 @@ class Main extends Component {
 }
 
 export default Main;
-
-/* Dating Table */
-/*<p>&nbsp;</p>
-        <h2>Voting List</h2>
-        <table className="table">
-          <thead>
-            <tr>
-              <th scope="col">Name</th>
-            </tr>
-          </thead>
-          <tbody id="votinglist">
-            { this.props.votinglist.map((voter, key) => {
-              return(
-                <tr key={key}>
-                  <td>{voter.publicKey}</td>
-                </tr>
-              )
-            })}
-          </tbody>
-        </table>
-        */
