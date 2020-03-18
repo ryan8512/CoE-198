@@ -2,11 +2,10 @@ import React, { Component } from 'react';
 import Web3 from 'web3'
 import sjcl from 'sjcl'
 import Registration from '../../abis/Registration.json'
-import Main from './Main'
 
-class App extends Component {
+class Track extends Component {
 
-  //StartUp Function
+    //StartUp Function
   async componentWillMount() {
     await this.loadWeb3()
     await this.loadBlockchainData()
@@ -80,26 +79,29 @@ class App extends Component {
     window.alert("This is your hash: "+ digest_sha256)
   }
 
-  render() {
-    return (
-      <div>
-        <div className="container-fluid mt-2">
-          <div className="row">
-            <main role="main" className="col-lg-12">
-              { this.state.loading
-                ? <div id="loader" className="text-center"><p className="text-center">Loading...</p></div>
-                : <Main
-                  account={this.state.account}
-                  votinglist={this.state.votinglist}
-                  registerVoter={this.registerVoter}
-                 />
-              }
-            </main>
-          </div>
+    render() {
+        return (
+        <div>
+            <h2>Voting List</h2>
+            <table className="table">
+              <thead>
+                <tr>
+                  <th scope="col">Name</th>
+                </tr>
+              </thead>
+              <tbody id="votinglist">
+                { this.state.votinglist.map((voter, key) => {
+                  return(
+                    <tr key={key}>
+                      <td>{voter.publicKey}</td>
+                    </tr>
+                  )
+                })}
+              </tbody>
+            </table>
         </div>
-      </div>
-    );
-  }
+        );
+    }
 }
-
-export default App;
+ 
+export default Track;

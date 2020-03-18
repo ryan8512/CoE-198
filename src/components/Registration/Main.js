@@ -76,6 +76,9 @@ class Main extends Component {
               required>
               <option selected>Choose...</option>
               <option>{this.props.account}</option>
+              <option>2fed27a876f80a86beae22d7d931765233309106b1e1af05d4f3fa6b181b5f252fed27a876f80a86beae22d7d931765233309106b1e1af05d4f3fa6b181b5f25</option>
+              <option>ac064673fcbca51199f572baa5fcaffa5b5daa5308df78ef471c61044d376519f259c8beaf9ffea5ef96f661a3e845a6f24564bbe5d081039f5975af5c299330</option>
+              <option>f987e969d8ecf13de2ffd5819c456456004f7c9aa04f1870178c1dfecf7ea99cf17705131615dd4a2d013231e042f3e5fa64f9c1b969f668cb572b75bebf1f15</option>
             </Input>
               <FormText color="muted">
                 Please do not forget your private key, or the key provided by Metamask

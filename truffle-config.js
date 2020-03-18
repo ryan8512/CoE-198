@@ -1,4 +1,5 @@
 module.exports = {
+
   networks: {
     development: {
       host: "127.0.0.1",
@@ -8,6 +9,7 @@ module.exports = {
   },
   contracts_directory: './src/contracts/',
   contracts_build_directory: './src/abis/',
+
   compilers: {
     solc: {
       optimizer: {
