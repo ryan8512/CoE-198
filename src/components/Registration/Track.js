@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import Web3 from 'web3'
-import sjcl from 'sjcl'
 import Registration from '../../abis/Registration.json'
 
 class Track extends Component {
@@ -27,9 +26,6 @@ class Track extends Component {
   
   async loadBlockchainData() {
     const web3 = window.web3
-    // Load account
-    const accounts = await web3.eth.getAccounts()
-    this.setState({ account: accounts[0] })
     //Get Smart Contract Address and NetworkID
     const networkId = await web3.eth.net.getId()
     const networkData = Registration.networks[networkId]
@@ -39,7 +35,6 @@ class Track extends Component {
       this.setState({ registration })
       //Call method simple read data- check through console if it read
       const voteCount = await registration.methods.voteCount().call()
-      console.log(voteCount);
       //Store the votecount in the state
       this.setState({ voteCount })
       // Load votinglist
@@ -58,25 +53,10 @@ class Track extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      account: '',
       voteCount: 0,
       votinglist: [],
       loading: true
     }
-    //Bind the function
-    this.registerVoter = this.registerVoter.bind(this)
-  }
-
-  registerVoter(name,pubkey) {
-    var bitArray = sjcl.hash.sha256.hash(name);  
-    var digest_sha256 = sjcl.codec.hex.fromBits(bitArray);
-    this.setState({ loading: true })
-    //Exposes the solidity backend function
-    this.state.registration.methods.registerVoter(digest_sha256,pubkey).send({ from: this.state.account })
-    .once('receipt', (receipt) => {
-      this.setState({ loading: false })
-    })
-    window.alert("This is your hash: "+ digest_sha256)
   }
 
     render() {
