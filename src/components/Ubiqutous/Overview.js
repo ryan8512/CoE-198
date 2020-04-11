@@ -1,6 +1,6 @@
 import React from 'react';
  
-const authors = () => {
+const Overview = () => {
     return (
         <div>
             
@@ -8,4 +8,4 @@ const authors = () => {
     );
 }
  
-export default authors;
+export default Overview;

@@ -9,7 +9,7 @@ import Overview from './Ubiqutous/Overview';
 import Authors from './Ubiqutous/Authors';
 import Support from './Ubiqutous/Support';
 import App from './Registration/App';
-import Track from './Registration/Track'
+import Track from './Registration/Track';
  
 class Router extends Component {
   render() {
