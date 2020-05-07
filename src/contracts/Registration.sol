@@ -1,42 +1,63 @@
 //pragma solidity ^0.5.0;
-pragma solidity >=0.4.22 <0.6.0;
+pragma solidity >=0.4.22 <0.7.0;
+pragma experimental ABIEncoderV2;
+
+import "./voterToken.sol";
+import "./SetupBlockchain.sol";
+import "./Ballot.sol";
 
 contract Registration{
     string public name;
+    address private regAdmin;
     uint public timelimit;
-    uint public voteCount = 0; //debugging
-    mapping(string => voter) public voters;
-    mapping(uint => voter) public votinglist; // debugging
+    SetupBlockchain setup;
     struct voter{
-        string publicKey;
+        string uniqueID;
         bool canVote;
+        string district;
     }
     
-    event VoterRegistered(
-        uint id,
-        string publicKey,
-        bool canVote
-    );
+    
+    mapping(address => voter) registeredVoters;
     
     constructor() public{
         name = "Registration Blockchain";
-        timelimit = block.timestamp + 86400;// one day  
+        timelimit = now + 86400;
+        regAdmin = msg.sender;
+    }
+    function registerVoter(string memory _uniqueID,string memory _district) public{
+        require((bytes(registeredVoters[msg.sender].uniqueID)).length == 0, "Voter already registered!");
+        require(registeredVoters[msg.sender].canVote == false, "Voter already registered!");
+        require(now < timelimit, "Registration period has ended");
+        
+        setup.allotToken(msg.sender);
+        
+        registeredVoters[msg.sender] = voter(
+            {
+                uniqueID: _uniqueID,
+                canVote: true,
+                district: _district
+            }
+        );
+
+
+    }
+
+    function applySetup(address _address) public {
+        require(msg.sender == regAdmin);
+        setup = SetupBlockchain(_address);
+    }
+    function authenticateID(address _address,string memory _uniqueID) public view returns (bool _authenticated){
+        return (keccak256(abi.encodePacked((registeredVoters[_address].uniqueID)))) == (keccak256(abi.encodePacked((_uniqueID)))) ;
+    }
+    function getDistrict(address _address) public view returns(string memory _district){
+        return registeredVoters[_address].district;
     }
     
-    function registerVoter(string memory _credentials, string memory _publicKey) public{
-        assert(bytes(_publicKey).length == 128);
-        if(voters[_credentials].canVote != true && block.timestamp < timelimit){
-            voters[_credentials].publicKey = _publicKey;
-            voters[_credentials].canVote = true;
-            votinglist[voteCount].publicKey = _credentials;
-            votinglist[voteCount].canVote = true;
-            voteCount++;
-            emit VoterRegistered(voteCount,_credentials,true);
-        }
+    function votingStatus(address _address) public view returns (bool _votestatus){
+        return registeredVoters[_address].canVote;
     }
-    
-    function votingStatus(string memory _credentials) public view returns (bool _votestatus){
-        return voters[_credentials].canVote;
+    function hasVoted(address _address) public{
+        registeredVoters[_address].canVote = false;
     }
-    
 }
