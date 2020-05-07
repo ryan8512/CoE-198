@@ -20,7 +20,7 @@ contract Election{
     function vote(string memory _uniqueID, uint256[] memory _votes) public{
         require(registration.votingStatus(msg.sender) == true, "You're not allowed to vote!");
         require(registration.authenticateID(msg.sender,_uniqueID) == true, "Invalid Credentials!");
-        Ballot(setup.getBallot(registration.getDistrict(msg.sender))).vote(_votes);
+        Ballot(setup.getBallot(registration.getDistrict(msg.sender))).vote(_votes,msg.sender);
         registration.hasVoted(msg.sender);
     }
     
