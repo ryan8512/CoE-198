@@ -62,7 +62,7 @@ contract SetupBlockchain{
         }
     }
     function createBallot(string memory _district) administrative public {
-        Ballot newBallot = new Ballot(DistrictElection[_district].Candidates,_district);
+        Ballot newBallot = new Ballot(DistrictElection[_district].Candidates,votingTokenlist,_district);
         DistrictElection[_district].ballot = address(newBallot);
     }
     function getBallot(string memory _district) public view returns(address _ballotAddress){
