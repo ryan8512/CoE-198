@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Web3 from 'web3'
 import sjcl from 'sjcl'
-import Registration from '../../abis/Registration.json'
+import Registration from '../../backend/abis/Registration.json'
 import Main from './Main'
 
 class App extends Component {

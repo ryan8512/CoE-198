@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Web3 from 'web3'
-import Registration from '../../abis/Registration.json'
+import Registration from '../../backend/abis/Registration.json'
 
 class Track extends Component {
 
