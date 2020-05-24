@@ -7,9 +7,9 @@ module.exports = {
       network_id: "*" // Match any network id
     },
   },
-  contracts_directory: './backend/contracts/',
-  contracts_build_directory: './backend/abis/',
-  migrations_directory: './backend/migrations',
+  contracts_directory: './src/backend/contracts/',
+  contracts_build_directory: './src/backend/abis/',
+  migrations_directory: './src/backend/migrations',
 
   compilers: {
     solc: {
