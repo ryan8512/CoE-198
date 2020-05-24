@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import Web3 from 'web3'
 import Registration from '../../backend/abis/Registration.json'
+import {Jumbotron, Table} from 'reactstrap'
 
 class Track extends Component {
 
     //StartUp Function
-  async componentWillMount() {
+  async componentDidMount() {
     await this.loadWeb3()
     await this.loadBlockchainData()
   }
@@ -62,8 +63,13 @@ class Track extends Component {
     render() {
         return (
         <div>
-            <h2>Voting List</h2>
-            <table className="table">
+            <Jumbotron class="jumbotron-fluid">
+              <div class="container">
+                <h1 class="display-4">Voting List</h1>
+                <p class="lead">Check if your hash/name is in the list to verify that you are registered</p>
+              </div>
+            </Jumbotron>
+            <Table striped>
               <thead>
                 <tr>
                   <th scope="col">Name</th>
@@ -78,7 +84,7 @@ class Track extends Component {
                   )
                 })}
               </tbody>
-            </table>
+            </Table>
         </div>
         );
     }

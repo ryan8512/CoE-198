@@ -3,6 +3,7 @@ import Web3 from 'web3'
 import sjcl from 'sjcl'
 import Registration from '../../backend/abis/Registration.json'
 import Main from './Main'
+import {Spinner} from 'reactstrap';
 
 class App extends Component {
 
@@ -87,7 +88,9 @@ class App extends Component {
           <div className="row">
             <main role="main" className="col-lg-12">
               { this.state.loading
-                ? <div id="loader" className="text-center"><p className="text-center">Loading...</p></div>
+                ? <div id="loader" className="text-center">
+                  <Spinner style={{ width: '3rem', height: '3rem' }} type="grow" />
+                </div>
                 : <Main
                   account={this.state.account}
                   votinglist={this.state.votinglist}

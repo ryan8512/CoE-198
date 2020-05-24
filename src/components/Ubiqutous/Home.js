@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import styles from './App.css';
+import banner from './img/banner.jpg'
 import { 
   Jumbotron,
   Carousel,
@@ -11,13 +12,21 @@ import {
 
  const items = [
   {
-    src: require('./img/secure_image.jpg'),
-    caption: 'Secure'
+    src: require('./img/accessibility.jpg'),
+    caption: 'Accessible',
+    text: 'Vote Anywhere'
   },
   {
-    src: require('./img/accessibility.jpg'),
-    caption: 'Accessible'
+    src: require('./img/secure_image.jpg'),
+    caption: 'Secure',
+    text: 'Hashed with SHA-256',
   },
+  {
+    src: require('./img/blockchain.jpg'),
+    caption: 'Blockchain',
+    text: 'Decetralized',
+  },
+  
 ];
 
 const Home = () => {
@@ -49,20 +58,20 @@ const Home = () => {
           key={item.src}
         >
           <img src={item.src} alt={item.altText} />
-          <CarouselCaption captionText={item.caption} captionHeader={item.caption} />
+          <CarouselCaption captionText={item.text} captionHeader={item.caption} />
         </CarouselItem>
       );
     });
 
     return (
        <div>
-            <Jumbotron class="jumbotron-fluid">
-              <div class="container">
-                <h1 class="display-4">Secure and Accessible Election for Everyone</h1>
-                <p class="lead">Plan your election now</p>
+            <Jumbotron className="jumbotron-fluid">
+              <div className="container">
+                <h1 className="display-4">Secure and Accessible Election for Everyone</h1>
+                <p className="lead">Plan your blockchain lection now</p>
               </div>
             </Jumbotron>
-            <div class="container">
+            <div className="container">
               <Carousel
                 activeIndex={activeIndex}
                 next={next}
