@@ -21,7 +21,7 @@ contract voterToken{
     }
     
     function transfer(address _from,address _to, uint _value) public returns (bool){
-        require (balance[_from] >= _value);
+        require (balance[_from] >= _value,"Insuficient Balance");
         owner = _to;
         balance[_from] = balance[_from] - _value;
         balance[_to] = balance[_to] + _value;

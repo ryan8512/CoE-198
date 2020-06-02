@@ -9,7 +9,8 @@ module.exports = {
   },
   contracts_directory: './src/backend/contracts/',
   contracts_build_directory: './src/backend/abis/',
-  migrations_directory: './src/backend/migrations',
+  migrations_directory: './src/backend/migrations/',
+  test_directory: './src/backend/test/',
 
   compilers: {
     solc: {

@@ -4,7 +4,6 @@ pragma experimental ABIEncoderV2;
 
 import "./voterToken.sol";
 import "./SetupBlockchain.sol";
-import "./Ballot.sol";
 
 contract Registration{
     string public name;
@@ -17,8 +16,17 @@ contract Registration{
         string district;
     }
     
-    
     mapping(address => voter) registeredVoters;
+
+    event SetupBlockchainLinked(
+        address SetupAddress
+    );
+
+    event VoterRegistered(
+        string uniqueID,
+        bool canVote,
+        string district
+    );
     
     constructor() public{
         name = "Registration Blockchain";
@@ -30,7 +38,7 @@ contract Registration{
         require(registeredVoters[msg.sender].canVote == false, "Voter already registered!");
         require(now < timelimit, "Registration period has ended");
         
-        setup.allotToken(msg.sender);
+        setup.allotToken();
         
         registeredVoters[msg.sender] = voter(
             {
@@ -40,12 +48,15 @@ contract Registration{
             }
         );
 
+        emit VoterRegistered(_uniqueID,true,_district);
+
 
     }
 
     function applySetup(address _address) public {
         require(msg.sender == regAdmin);
         setup = SetupBlockchain(_address);
+        emit SetupBlockchainLinked(_address);
     }
     function authenticateID(address _address,string memory _uniqueID) public view returns (bool _authenticated){
         return (keccak256(abi.encodePacked((registeredVoters[_address].uniqueID)))) == (keccak256(abi.encodePacked((_uniqueID)))) ;
