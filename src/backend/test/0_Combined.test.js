@@ -3,7 +3,6 @@ const SETUPBLOCKCHAIN = artifacts.require('./SetupBlockchain.sol');
 const REGISTRATION = artifacts.require('./Registration.sol');
 const RESULTS = artifacts.require('./Results.sol');
 
-
 contract('SetupBlockchain + Registration + Election',(accounts) => {
     let Registration,SetupBlockchain,Election,Results,setupBlockchainAddress, registrationAddress, electionAddress,resultsAddress;
     
@@ -161,36 +160,32 @@ contract('SetupBlockchain + Registration + Election',(accounts) => {
         })
     });
 
-    describe('createBallot and getBallot function for NATIONAL', async () => {
-        let result;
+    describe('createBallot and getBallot function for ALL regions', async() => {
+        let resultArray = [];
+        let districtArray = ["NATIONAL","NCR","Region I","CAR",
+                             "Region II","Region III", "Region IV-A",
+                             "Region IV-B","Region V","Region VI",
+                             "Region VII","Region VIII", "Region IX",
+                             "Region X","Region XI","Region XII",
+                             "Region XIII","ARMM"
+                            ];
+
         before(async () => {
-            SetupBlockchain.createBallot("NATIONAL");
-            result = await SetupBlockchain.getBallot("NATIONAL");
+            for(let i=0;i < districtArray.length; i++){
+                SetupBlockchain.createBallot(districtArray[i]);
+                resultArray[i] = await SetupBlockchai.getBallot(districtArray[i]);
+            }
+
+        it('ALL ballot succesfully created', async () => {
+            for(let i=0;i < districtArray.length; i++){
+                assert.notEqual(resultArray[i],0x0);
+                assert.notEqual(resultArray[i],'');
+                assert.notEqual(resultArray[i],null);
+                assert.notEqual(resultArray[i],undefined);
+            }
         });
 
-        it('NATIONAL ballot successfully created', async () => {
-            assert.notEqual(result,0x0);
-            assert.notEqual(result,'');
-            assert.notEqual(result,null);
-            assert.notEqual(result,undefined);
         });
-        
-    });
-
-    describe('createBallot and getBallot function for LOCAL', async () => {
-        let result;
-        before(async () => {
-            SetupBlockchain.createBallot("NCR");
-            result = await SetupBlockchain.getBallot("NCR");
-        });
-
-        it('NCR ballot successfully created', async () => {
-            assert.notEqual(result,0x0);
-            assert.notEqual(result,'');
-            assert.notEqual(result,null);
-            assert.notEqual(result,undefined);
-        });
-        
     });
 
     /*!!!!!!!!!!!!!!!!!!!!!!Registration*/
@@ -218,6 +213,7 @@ contract('SetupBlockchain + Registration + Election',(accounts) => {
             assert.equal(event[0],registrationAddress, 'address is correct');
         });
     });
+    /*
 
     describe('registerVoter function',async () => {
         let result4,result5,result6,result7;
@@ -292,8 +288,8 @@ contract('SetupBlockchain + Registration + Election',(accounts) => {
             assert.equal(event[2],"NCR");
         });
     });
-
-    /*!!!!!!!!!!!!!!!!!!!!!!!!Election*/
+    */
+    //!!!!!!!!!!!!!!!!!!!!!!!!Election
     
     describe('applySetup function', async () =>{
         let result;
@@ -318,8 +314,46 @@ contract('SetupBlockchain + Registration + Election',(accounts) => {
             assert.equal(event[0],registrationAddress, 'address is correct');
         });
     });
+    /*
+    describe('getNationalCandidates and getLocalCandidates function', async () =>{
+        let result1,result2;
+        before(async () => {
+            result1 = await Election.getNationalCandidates();
+            result2 = await Election.getLocalCandidates({ from: accounts[1] });
+        });
+
+        it('getNationalCandidates test', async () =>{
+            assert.notEqual(result1,0x0);
+            assert.notEqual(result1,'');
+            assert.notEqual(result1,null);
+            assert.notEqual(result1,undefined);
+        });
+
+        it('getLocalCandidates test', async () =>{
+            assert.notEqual(result2,0x0);
+            assert.notEqual(result2,'');
+            assert.notEqual(result2,null);
+            assert.notEqual(result2,undefined);
+        });
+    });
     
+    describe('getNationalCandidates and getLocalCandidates function', async () =>{
+        let result1,result2;
+        before(async () => {
+            result1 = await Election.getNationalCount();
+            result2 = await Election.getLocalCount({ from: accounts[1] });
+        });
+
+        it('getNationalCandidates test', async () =>{
+            assert.equal(result1,2,"national count is correct");
+        });
+
+        it('getLocalCandidates test', async () =>{
+            assert.equal(result2,2,"local count is correct");
+        });
+    });
     
+
     describe('Voter1:Robredo & Voter3:Robredo & Duterte:Duterte & Robredo:Robredo', async () => {
         let result1,result2,result3,result4,result5,result6,result7;
         before(async () => {
@@ -349,7 +383,7 @@ contract('SetupBlockchain + Registration + Election',(accounts) => {
         });
     });
 
-    /*!!!!!!!!!!!!!!!!!!!!!!!!!Results*/
+    //!!!!!!!!!!!!!!!!!!!!!!!!!Results
     describe('applySetup function', async () =>{
         let result;
         before(async () => {
@@ -397,6 +431,6 @@ contract('SetupBlockchain + Registration + Election',(accounts) => {
             assert.equal(votes,6, 'voteCount is correct');
         });
     });
-
+*/
     
 });

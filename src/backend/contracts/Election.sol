@@ -10,7 +10,6 @@ contract Election{
     uint ElectionDealine;
     Registration registration;
     SetupBlockchain setup;
-
     event RegistrationLinked(
         address RegistrationAddress
     );
@@ -44,5 +43,22 @@ contract Election{
     function applySetup(address _address) administrative public {
         setup = SetupBlockchain(_address);
         emit SetupBlockchainLinked(_address);
+    }
+
+    /*For UI*/
+    function getNationalCandidates() public view returns(SetupBlockchain.candidate[] memory _candidates){
+        return Ballot(setup.getBallot("NATIONAL")).getCandidates();
+    }
+
+    function getLocalCandidates() public view returns(SetupBlockchain.candidate[] memory _candidates){
+        return Ballot(setup.getBallot(registration.getDistrict(msg.sender))).getCandidates();
+    }
+
+    function getNationalCount() public view returns(uint _count){
+        return Ballot(setup.getBallot("NATIONAL")).candidateCount();
+    }
+
+    function getLocalCount() public view returns(uint _count){
+        return Ballot(setup.getBallot(registration.getDistrict(msg.sender))).candidateCount();
     }
 } 

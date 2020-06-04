@@ -52,50 +52,17 @@ const Navigation = (props) => {
               </Nav>
               <Nav className="ml-auto" navbar>
               <NavItem>
-                  <NavLink tag={Link} to="/track">Track</NavLink>
-              </NavItem>
-              <NavItem>
                   <NavLink tag={Link} to="/registration">Sign Up</NavLink>
               </NavItem>
               <NavItem>
-                  <Button color="primary" onClick={modal_toggle}> Log In</Button>
+                  <NavLink tag={Link} to="/vote"> Vote </NavLink>
+              </NavItem>
+              <NavItem>
+                  <NavLink tag={Link} to="/results"> Results </NavLink>
               </NavItem>
               </Nav>
             </Collapse>
           </Navbar>
-          <Modal isOpen={modal} toggle={modal_toggle}>
-            <ModalHeader toggle={modal_toggle}>Login</ModalHeader>
-            <ModalBody>
-              <Form>
-                <FormGroup>
-                  <Label className="h5" for="arbitrary"> Arbitrary Data </Label>
-                  <Input
-                    id="arbitrary"
-                    type="text"
-                    className="form-control"
-                    placeholder="Any Data"
-                    required/>
-                </FormGroup>
-                <FormGroup>
-                  <Label className="h5" for="signature"> Your Signature </Label>
-                  <Input
-                    id="signature"
-                    type="text"
-                    className="form-control"
-                    placeholder="Digitial Signature"
-                    required/>
-                <FormText color="muted">
-                  A signature is produced by hashing (SHA-256) the arbitrary data you provided
-                  and encrypting it with your private key.
-                </FormText>
-                </FormGroup>
-              </Form>
-            </ModalBody>
-            <ModalFooter>
-              <Button color="primary" onClick={modal_toggle}>Login</Button>{' '}
-              <Button color="secondary" onClick={modal_toggle}>Cancel</Button>
-            </ModalFooter>
-          </Modal>
        </div>
     );
 }

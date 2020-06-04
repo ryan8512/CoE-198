@@ -6,7 +6,7 @@ import "./voterToken.sol";
 contract Ballot{
     SetupBlockchain setup;
     string district;
-    SetupBlockchain.candidate[] Candidates;
+    SetupBlockchain.candidate[] public Candidates;
     mapping(uint16 => address) votingTokens;
     
     constructor(SetupBlockchain.candidate[] memory _candidates,
@@ -31,5 +31,13 @@ contract Ballot{
         for (uint i = 0;i < votes.length;i++){
             voterToken(votingTokens[Candidates[votes[i]].position]).transfer(_address,Candidates[votes[i]].candidateAddress,1);
         }
+    }
+    /*For user interface*/
+    function candidateCount() public view returns(uint _count){
+        return Candidates.length;
+    }
+
+    function getCandidates() public view returns(SetupBlockchain.candidate[] memory _candidateList){
+        return Candidates;
     }
 }
