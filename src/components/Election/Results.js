@@ -130,7 +130,7 @@ class Result extends Component{
                   <h4 className="alert-heading">Winner Names and Votes</h4>
                   <hr />
                   <p className="mb-0">
-                    Only the winners are shown in the results below.
+                    Only one winner is shown below. One being the most voted individual, even though there can also be other winners.
                   </p>
                 </Alert>
              <Table className="container" striped>

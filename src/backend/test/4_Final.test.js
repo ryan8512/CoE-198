@@ -2,8 +2,16 @@ const ELECTION = artifacts.require('./Election.sol');
 const SETUPBLOCKCHAIN = artifacts.require('./SetupBlockchain.sol');
 const REGISTRATION = artifacts.require('./Registration.sol');
 const RESULTS = artifacts.require('./Results.sol');
+/*Parameters*/
 
-contract.skip('SetupBlockchain + Registration + Election',(accounts) => {
+const districtCount = 2;
+const positionCount = 2;
+const candidateCount = 54;
+const voterCount = 3400;
+///////////////////////
+/*AVOID ODD NUMBERS DUE TO DIVIDE BY 2*/
+
+contract('SetupBlockchain + Registration + Election',(accounts) => {
     let Registration,SetupBlockchain,Election,Results,setupBlockchainAddress, registrationAddress, electionAddress,resultsAddress;
     
     /*!!!!!!!!!!!!!!!!!!!!!! SetupBlockchain*/
@@ -57,106 +65,98 @@ contract.skip('SetupBlockchain + Registration + Election',(accounts) => {
         });
     });
 
-    describe('NATIONAL addCandidate function', async () => {
-        let allCandidates;
+    describe('ALL addCandidate function', async () => {
+        let resultArray = [];
+        let allCandidates = [];
+        let offset = 0;
+        let districtArray = ["NATIONAL","NCR","Region I","CAR",
+                             "Region II","Region III", "Region IV-A",
+                             "Region IV-B","Region V","Region VI",
+                             "Region VII","Region VIII", "Region IX",
+                             "Region X","Region XI","Region XII",
+                             "Region XIII","ARMM"
+                            ];
         before(async () =>{
-            allCandidates = await SetupBlockchain.addCandidates(
-                [["Duterte",accounts[9],0],
-                 ["Robredo",accounts[8],1],
-                ],
-                "NATIONAL"
-            );
+            
+            for(let i = 0;i< districtCount;i++){
+                allCandidates = [];
+                for(let j = 0;j < candidateCount/districtCount;j++){
+                    if(i > 0){
+                        offset = positionCount/2; //Only for NATIONAL
+                    }
+                    allCandidates.push(["Candidate"+(j+i),accounts[(voterCount-1)-(j+i)],(j%(positionCount/2)) + offset])
+                }
+                resultArray[i] = await SetupBlockchain.addCandidates(
+                    allCandidates,
+                    districtArray[i],
+                );
+            }
+            
         });
 
-        it('candidate 1 (duterte) successfully created', async() => {
-            const event = allCandidates.logs[0].args;
-            assert.equal(event[0],"Duterte", 'name is correct');
-            assert.equal(event[1],accounts[9], 'address is correct');
-            assert.equal(event[2], 0, 'position is correct');
-        });
-
-        it('candidate 2 (robredo) successfully created', async() => {
-            const event = allCandidates.logs[1].args;
-            assert.equal(event[0],"Robredo", 'name is correct');
-            assert.equal(event[1],accounts[8], 'address is correct');
-            assert.equal(event[2], 1, 'position is correct');
-        });
+        it("ALL candidates successfully created", async () => {
+            for(let i = 0; i < resultArray.length; i++){
+                for(let j=0; j < candidateCount/districtCount; j++){
+                    offset=0;
+                    const event = resultArray[i].logs[j].args;
+                    assert.equal(event[0],"Candidate"+(i+j),'name is correct');
+                    assert.equal(event[1],accounts[(voterCount-1)-(j+i)], 'address is correct');
+                    if(i > 0){
+                        offset = positionCount/2; //Only for NATIONAL
+                    }
+                    assert.equal(event[2],(j%(positionCount/2)) + offset,'position is correct');
+                }
+            }
+        });   
     });
-
-    describe('LOCAL addCandidate function', async () => {
-        let allCandidates;
-        before(async () =>{
-            allCandidates = await SetupBlockchain.addCandidates(
-                [["Isko",accounts[7],2],
-                 ["Erap",accounts[6],2],
-                ],
-                "NCR"
-            );
-        });
-
-        it('candidate 1 (Isko) successfully created', async() => {
-            const event = allCandidates.logs[0].args;
-            assert.equal(event[0],'Isko', 'name is correct');
-            assert.equal(event[1],accounts[7], 'address is correct');
-            assert.equal(event[2], 2, 'position is correct');
-        });
-
-        it('candidate 2 (Erap) successfully created', async() => {
-            const event = allCandidates.logs[1].args;
-            assert.equal(event[0],'Erap', 'name is correct');
-            assert.equal(event[1],accounts[6], 'address is correct');
-            assert.equal(event[2], 2, 'position is correct');
-        });
-    });
-
-    describe('createToken function', async () => {
+    
+    describe('ALL createToken function', async () => {
         let allTokens;
+        nameArray = [];
+        symbolArray = [];
+        amountArray = [];
+        positionArray = [];
+        
+        
         before(async () =>{
+            for(let i = 0; i < positionCount; i++){
+                nameArray[i] = "Position"+i;
+                symbolArray[i] = "P"+i;
+                amountArray[i] = 1;
+                positionArray[i] = i;
+            }
             allTokens = await SetupBlockchain.createToken(
-                ["President","Vice President","Mayor"],
-                ["P","VP","M"],
-                [1,1,1],
-                [0,1,2]
+                nameArray,
+                symbolArray,
+                amountArray,
+                positionArray
             );
         });
 
         it('token 1 (President) successfully created', async () => {
-            const event = allTokens.logs[0].args;
-            assert.equal(event[0],"President", 'name is correct');
-            assert.equal(event[1],event.tokenAddress, 'address is correct'); //rendundant
-            assert.equal(event[2],1, 'amountperVoter is correct');
-            assert.equal(event[3],0, 'position is correct');
-        });
-
-        it('token 2 (Vice President) successfully created', async () => {
-            const event = allTokens.logs[1].args;
-            assert.equal(event[0],"Vice President", 'name is correct');
-            assert.equal(event[1],event.tokenAddress, 'address is correct'); //rendundant
-            assert.equal(event[2],1, 'amountperVoter is correct');
-            assert.equal(event[3],1, 'position is correct');
-        });
-
-        it('token 3 (Mayor) successfully created', async () => {
-            const event = allTokens.logs[2].args;
-            assert.equal(event[0],"Mayor", 'name is correct');
-            assert.equal(event[1],event.tokenAddress, 'address is correct'); //rendundant
-            assert.equal(event[2],1, 'amountperVoter is correct');
-            assert.equal(event[3],2, 'position is correct');
+            for(let i=0; i < positionCount;i++){
+                const event = allTokens.logs[i].args;
+                assert.equal(event[0],"Position"+i, 'name is correct');
+                assert.equal(event[1],event.tokenAddress, 'address is correct'); //rendundant
+                assert.equal(event[2],1, 'amountperVoter is correct');
+                assert.equal(event[3],i, 'position is correct');
+            }
         });
     });
 
     describe('check votingTokenList', async () => {
-        let token1, token2, token3;
+        let tokenArray = [];
         before(async () => {
-            token1 = await SetupBlockchain.votingTokenlist(0);
-            token2 = await SetupBlockchain.votingTokenlist(1);
-            token3 = await SetupBlockchain.votingTokenlist(2);
+            for(let i=0;i<positionCount;i++){
+                tokenArray[i] = await SetupBlockchain.votingTokenlist(i);
+            }
         });
 
         it('all tokens are successfully created', async () => {
-            assert.equal(token1.name,"President",'name is correct');
-            assert.equal(token2.name,"Vice President",'name is correct');
-            assert.equal(token3.name,"Mayor",'name is correct');
+            for(let i=0;i<positionCount;i++){
+                assert.equal(tokenArray[i].name,"Position"+i,'name is correct');
+            }
+            
         })
     });
 
@@ -171,16 +171,10 @@ contract.skip('SetupBlockchain + Registration + Election',(accounts) => {
                             ];
 
         before(async () => {
-            let old_time = new Date();
             for(let i=0;i < districtArray.length; i++){
                 SetupBlockchain.createBallot(districtArray[i]);
                 resultArray[i] = await SetupBlockchain.getBallot(districtArray[i]);
-            }
-            let new_time = new Date();
-            let seconds_passed = new_time - old_time;
-            console.log(old_time.getTime());
-            console.log(new_time.getTime());
-            console.log(seconds_passed);
+            }        
         });
         
         it('ALL ballot succesfully created', async () => {
@@ -222,81 +216,60 @@ contract.skip('SetupBlockchain + Registration + Election',(accounts) => {
     
     
     describe('registerVoter function',async () => {
-        let result4,result5,result6,result7;
+        let container;
+        let districtArray = ["NCR","Region I","CAR",
+                             "Region II","Region III", "Region IV-A",
+                             "Region IV-B","Region V","Region VI",
+                             "Region VII","Region VIII", "Region IX",
+                             "Region X","Region XI","Region XII",
+                             "Region XIII","ARMM"
+                            ]; //NATIONAL NOT INCLUDED THEREFORE -1
         let resultArray = [];
         before(async() => {
-            for(let i=0;i<3;i++){
+            let old_time = new Date();
+            for(let i=0;i<(voterCount - candidateCount);i++){
                 resultArray[i] = await Registration.registerVoter(
-                    "Voter"+(i+1),
-                    "NCR",
-                    { from: accounts[i+1] }
+                    "Voter"+(i),
+                    districtArray[i%(districtCount-1)],
+                    { from: accounts[i] }
+                );
+                container = i;
+            }
+            container = container +1;
+            for(let i=0; i<candidateCount ;i++){
+                resultArray[i+container] = await Registration.registerVoter(
+                    "Candidate"+i,
+                    districtArray[(container+i)%(districtCount-1)],
+                    { from: accounts[(voterCount-1)-i] }
                 );
             }
-            result4 = await Registration.registerVoter(
-                "Duterte",
-                "NCR",
-                { from: accounts[9] }
-            );
-            result5 = await Registration.registerVoter(
-                "Robredo",
-                "NCR",
-                { from: accounts[8] }
-            );
-
-            result6 = await Registration.registerVoter(
-                "Isko",
-                "NCR",
-                { from: accounts[7] }
-            );
-
-            result7 = await Registration.registerVoter(
-                "Erap",
-                "NCR",
-                { from: accounts[6] }
-            );
-
+            let new_time = new Date();
+            let seconds_passed = new_time - old_time;
+            console.log("Registration Time: "+seconds_passed);
         })
 
-        for(let i=1;i<=3;i++){
-            it('Voter '+i+' registered', async () => {
-                const event = (resultArray[i-1]).logs[0].args;
-                assert.equal(event[0],"Voter"+i);
-                assert.equal(event[1],true);
-                assert.equal(event[2],"NCR");
-            });
-        }
-        
-        it('Duterte registered', async () => {
-            const event = result4.logs[0].args;
-            assert.equal(event[0],"Duterte");
-            assert.equal(event[1],true);
-            assert.equal(event[2],"NCR");
+        it('ALL voters (exclusive of candidates) are registered',async () => {
+            console.log()
+            for(let i=0;i<voterCount;i++){
+                const event = resultArray[i].logs[0].args;
+                if(i>=voterCount-candidateCount){
+                    assert.equal(event[0],"Candidate"+(i-(voterCount-candidateCount)),'name is correct');
+                    assert.equal(event[1],true,'can Vote');
+                    assert.equal(event[2],districtArray[i%(districtCount-1)],'district is correct');
+                }
+                else{
+                    assert.equal(event[0],"Voter"+i,'name is correct');
+                    assert.equal(event[1],true,'can Vote');
+                    assert.equal(event[2],districtArray[i%(districtCount-1)],'district is correct');
+                }
+                
+            }
         });
 
-        it('Robredo registered', async () => {
-            const event = result5.logs[0].args;
-            assert.equal(event[0],"Robredo");
-            assert.equal(event[1],true);
-            assert.equal(event[2],"NCR");
-        });
-
-        it('Isko registered', async () => {
-            const event = result6.logs[0].args;
-            assert.equal(event[0],"Isko");
-            assert.equal(event[1],true);
-            assert.equal(event[2],"NCR");
-        });
-
-        it('Erap registered', async () => {
-            const event = result7.logs[0].args;
-            assert.equal(event[0],"Erap");
-            assert.equal(event[1],true);
-            assert.equal(event[2],"NCR");
-        });
     });
     
     //!!!!!!!!!!!!!!!!!!!!!!!!Election
-    
+ /*   
     describe('applySetup function', async () =>{
         let result;
         before(async () => {
@@ -359,7 +332,7 @@ contract.skip('SetupBlockchain + Registration + Election',(accounts) => {
         });
     });
     
-
+    /*
     describe('Voter1:Robredo & Voter3:Robredo & Duterte:Duterte & Robredo:Robredo', async () => {
         let result1,result2,result3,result4,result5,result6,result7;
         before(async () => {
@@ -387,57 +360,5 @@ contract.skip('SetupBlockchain + Registration + Election',(accounts) => {
             assert.equal(result6,false,'passed');
             assert.equal(result7,false,'passed');
         });
-    });
-    //!!!!!!!!!!!!!!!!!!!!!!!!!Results
-    describe('applySetup function', async () =>{
-        let result;
-        before(async () => {
-            result = await Results.applySetup(setupBlockchainAddress);
-        });
-
-        it('Results -> SetupBlockchain linked', async () =>{
-            const event = result.logs[0].args;
-            assert.equal(event[0],setupBlockchainAddress, 'address is correct');
-        });
-    });
-    
-    describe('{President} getWinnerName and getWinnerVotes function', async () =>{
-        let name,votes;
-        before(async () => {
-            await Results.processWinnerName("NATIONAL",0);
-            name = await Results.getWinnerName();
-            votes = await Results.getWinnerVotes();
-
-        });
-
-        it('Duterte Winner', async () =>{
-            assert.equal(name,'Duterte', 'winner is correct');
-        });
-
-        it('Duterte Vote Count', async () =>{
-            assert.equal(votes,6, 'voteCount is correct');
-        });
-    });
-
-    describe('{MAYOR} getWinnerName and getWinnerVotes function', async () =>{
-        let name,votes;
-        before(async () => {
-            await Results.processWinnerName("NCR",2);
-            name = await Results.getWinnerName();
-            votes = await Results.getWinnerVotes();
-
-        });
-
-        it('Isko Winner', async () =>{
-            assert.equal(name,'Isko', 'winner is correct');
-        });
-
-        it('Isko Vote Count', async () =>{
-            assert.equal(votes,5, 'voteCount is correct');
-        });
-    });
-
-    
-    
-    
+    });*/
 });
