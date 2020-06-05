@@ -173,9 +173,10 @@ contract('SetupBlockchain + Registration + Election',(accounts) => {
         before(async () => {
             for(let i=0;i < districtArray.length; i++){
                 SetupBlockchain.createBallot(districtArray[i]);
-                resultArray[i] = await SetupBlockchai.getBallot(districtArray[i]);
+                resultArray[i] = await SetupBlockchain.getBallot(districtArray[i]);
             }
-
+        });
+        
         it('ALL ballot succesfully created', async () => {
             for(let i=0;i < districtArray.length; i++){
                 assert.notEqual(resultArray[i],0x0);
@@ -183,7 +184,6 @@ contract('SetupBlockchain + Registration + Election',(accounts) => {
                 assert.notEqual(resultArray[i],null);
                 assert.notEqual(resultArray[i],undefined);
             }
-        });
 
         });
     });
@@ -213,8 +213,8 @@ contract('SetupBlockchain + Registration + Election',(accounts) => {
             assert.equal(event[0],registrationAddress, 'address is correct');
         });
     });
-    /*
-
+    
+    
     describe('registerVoter function',async () => {
         let result4,result5,result6,result7;
         let resultArray = [];
@@ -288,7 +288,7 @@ contract('SetupBlockchain + Registration + Election',(accounts) => {
             assert.equal(event[2],"NCR");
         });
     });
-    */
+    
     //!!!!!!!!!!!!!!!!!!!!!!!!Election
     
     describe('applySetup function', async () =>{
@@ -314,7 +314,7 @@ contract('SetupBlockchain + Registration + Election',(accounts) => {
             assert.equal(event[0],registrationAddress, 'address is correct');
         });
     });
-    /*
+    
     describe('getNationalCandidates and getLocalCandidates function', async () =>{
         let result1,result2;
         before(async () => {
@@ -382,7 +382,6 @@ contract('SetupBlockchain + Registration + Election',(accounts) => {
             assert.equal(result7,false,'passed');
         });
     });
-
     //!!!!!!!!!!!!!!!!!!!!!!!!!Results
     describe('applySetup function', async () =>{
         let result;
@@ -393,6 +392,24 @@ contract('SetupBlockchain + Registration + Election',(accounts) => {
         it('Results -> SetupBlockchain linked', async () =>{
             const event = result.logs[0].args;
             assert.equal(event[0],setupBlockchainAddress, 'address is correct');
+        });
+    });
+    
+    describe('{President} getWinnerName and getWinnerVotes function', async () =>{
+        let name,votes;
+        before(async () => {
+            await Results.processWinnerName("NATIONAL",0);
+            name = await Results.getWinnerName();
+            votes = await Results.getWinnerVotes();
+
+        });
+
+        it('Duterte Winner', async () =>{
+            assert.equal(name,'Duterte', 'winner is correct');
+        });
+
+        it('Duterte Vote Count', async () =>{
+            assert.equal(votes,6, 'voteCount is correct');
         });
     });
 
@@ -414,23 +431,7 @@ contract('SetupBlockchain + Registration + Election',(accounts) => {
         });
     });
 
-    describe('{President} getWinnerName and getWinnerVotes function', async () =>{
-        let name,votes;
-        before(async () => {
-            await Results.processWinnerName("NATIONAL",0);
-            name = await Results.getWinnerName();
-            votes = await Results.getWinnerVotes();
-
-        });
-
-        it('Duterte Winner', async () =>{
-            assert.equal(name,'Duterte', 'winner is correct');
-        });
-
-        it('Duterte Vote Count', async () =>{
-            assert.equal(votes,6, 'voteCount is correct');
-        });
-    });
-*/
+    
+    
     
 });

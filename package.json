@@ -14,7 +14,6 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1",
     "reactstrap": "^8.4.1",
-    "sjcl": "^1.0.8",
     "web3": "^1.2.8"
   },
   "scripts": {

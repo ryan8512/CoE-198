@@ -114,7 +114,8 @@ contract SetupBlockchain{
     }
     
     function getResult(string memory _districts, uint16 _position) public returns(results memory _Array){
-        //Get all candidates to a certain district
+        //Get all candidates from a certain district
+        max = 0; //reset the state of the maximum
         for(uint i = 0; i < DistrictElection[_districts].Candidates.length; i++){
             district_candidates.push(candidate({
                 name: DistrictElection[_districts].Candidates[i].name,
@@ -122,7 +123,7 @@ contract SetupBlockchain{
                 position: DistrictElection[_districts].Candidates[i].position
             }));
         }
-        //Get same position to a certain district
+        //Get all candidates from the same position from a certain district
         for(uint j = 0; j < district_candidates.length; j++){
             if(district_candidates[j].position == votingTokenlist[_position].position){
                 competition_candidates.push(candidate({
