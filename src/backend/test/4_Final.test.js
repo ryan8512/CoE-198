@@ -6,8 +6,8 @@ const RESULTS = artifacts.require('./Results.sol');
 
 const districtCount = 2;
 const positionCount = 2;
-const candidateCount = 54;
-const voterCount = 3400;
+const candidateCount = 180;
+const voterCount = 204;
 ///////////////////////
 /*AVOID ODD NUMBERS DUE TO DIVIDE BY 2*/
 
@@ -227,21 +227,21 @@ contract('SetupBlockchain + Registration + Election',(accounts) => {
         let resultArray = [];
         before(async() => {
             let old_time = new Date();
-            for(let i=0;i<(voterCount - candidateCount);i++){
-                resultArray[i] = await Registration.registerVoter(
-                    "Voter"+(i),
-                    districtArray[i%(districtCount-1)],
-                    { from: accounts[i] }
-                );
-                container = i;
-            }
-            container = container +1;
-            for(let i=0; i<candidateCount ;i++){
-                resultArray[i+container] = await Registration.registerVoter(
-                    "Candidate"+i,
-                    districtArray[(container+i)%(districtCount-1)],
-                    { from: accounts[(voterCount-1)-i] }
-                );
+            for(let i=0;i < voterCount; i++){
+                if(i>=(voterCount-candidateCount)){
+                    resultArray[i] = await Registration.registerVoter(
+                        "Candidate"+(i-(voterCount - candidateCount)),
+                        districtArray[i%(districtCount-1)],
+                        { from: accounts[(voterCount-1)-(i-(voterCount - candidateCount))] }
+                    );
+                }
+                else{
+                    resultArray[i] = await Registration.registerVoter(
+                        "Voter"+(i),
+                        districtArray[i%(districtCount-1)],
+                        { from: accounts[i] }
+                    );
+                }
             }
             let new_time = new Date();
             let seconds_passed = new_time - old_time;
@@ -249,7 +249,6 @@ contract('SetupBlockchain + Registration + Election',(accounts) => {
         })
 
         it('ALL voters (exclusive of candidates) are registered',async () => {
-            console.log()
             for(let i=0;i<voterCount;i++){
                 const event = resultArray[i].logs[0].args;
                 if(i>=voterCount-candidateCount){
@@ -269,7 +268,7 @@ contract('SetupBlockchain + Registration + Election',(accounts) => {
     });
     
     //!!!!!!!!!!!!!!!!!!!!!!!!Election
- /*   
+ 
     describe('applySetup function', async () =>{
         let result;
         before(async () => {
@@ -294,71 +293,40 @@ contract('SetupBlockchain + Registration + Election',(accounts) => {
         });
     });
     
-    describe('getNationalCandidates and getLocalCandidates function', async () =>{
-        let result1,result2;
-        before(async () => {
-            result1 = await Election.getNationalCandidates();
-            result2 = await Election.getLocalCandidates({ from: accounts[1] });
-        });
 
-        it('getNationalCandidates test', async () =>{
-            assert.notEqual(result1,0x0);
-            assert.notEqual(result1,'');
-            assert.notEqual(result1,null);
-            assert.notEqual(result1,undefined);
-        });
-
-        it('getLocalCandidates test', async () =>{
-            assert.notEqual(result2,0x0);
-            assert.notEqual(result2,'');
-            assert.notEqual(result2,null);
-            assert.notEqual(result2,undefined);
-        });
-    });
-    
-    describe('getNationalCandidates and getLocalCandidates function', async () =>{
-        let result1,result2;
-        before(async () => {
-            result1 = await Election.getNationalCount();
-            result2 = await Election.getLocalCount({ from: accounts[1] });
-        });
-
-        it('getNationalCandidates test', async () =>{
-            assert.equal(result1,2,"national count is correct");
-        });
-
-        it('getLocalCandidates test', async () =>{
-            assert.equal(result2,2,"local count is correct");
-        });
-    });
-    
-    /*
     describe('Voter1:Robredo & Voter3:Robredo & Duterte:Duterte & Robredo:Robredo', async () => {
-        let result1,result2,result3,result4,result5,result6,result7;
+        let voteArray = [];
+        let resultArray = [];
         before(async () => {
-            Election.vote('Voter1',[0,1],[0],{ from: accounts[1] });
-            Election.vote('Voter3',[0,1],[0],{ from: accounts[3] });
-            Election.vote('Duterte',[0,1],[0],{ from: accounts[9] });
-            Election.vote('Robredo',[0,1],[0],{ from: accounts[8] });
-            Election.vote('Isko',[0,1],[0],{ from: accounts[7] });
-            Election.vote('Erap',[0,1],[1],{ from: accounts[6] });
-            result1 = await Registration.votingStatus(accounts[1]);
-            result2 = await Registration.votingStatus(accounts[2]);
-            result3 = await Registration.votingStatus(accounts[3]);
-            result4 = await Registration.votingStatus(accounts[9]);
-            result5 = await Registration.votingStatus(accounts[8]);
-            result6 = await Registration.votingStatus(accounts[7]);
-            result7 = await Registration.votingStatus(accounts[6]);
+            for(let i = 0;i < positionCount/2; i++){
+                voteArray[i] = i;
+            }
+            let old_time = new Date();
+            for(let i = 0; i < voterCount; i++){
+                if(i>=(voterCount - candidateCount)){
+                    await Election.vote('Candidate'+(i-(voterCount-candidateCount)),voteArray,voteArray,{ from: accounts[(voterCount-1)-(i-(voterCount - candidateCount))] });
+                }
+                else{
+                    await Election.vote('Voter'+i,voteArray,voteArray,{ from: accounts[i] });
+                }
+            }
+            let new_time = new Date();
+            let seconds_passed = new_time - old_time;
+            console.log("Election Time: "+seconds_passed);
+            for(let i=0; i <voterCount; i++){
+                if(i>=(voterCount - candidateCount)){
+                    resultArray[i] = await Registration.votingStatus(accounts[(voterCount-1)-(i-(voterCount - candidateCount))]);
+                }
+                else{
+                    resultArray[i] = await Registration.votingStatus(accounts[i]);
+                }
+            }
         });
-        
-        it('All have voted', async () => {
-            assert.equal(result1,false,'passed');
-            assert.equal(result2,true,'passed'); //Not yet Voted
-            assert.equal(result3,false,'passed');
-            assert.equal(result4,false,'passed');
-            assert.equal(result5,false,'passed');
-            assert.equal(result6,false,'passed');
-            assert.equal(result7,false,'passed');
+
+        it('ALL have voted', async () =>{
+            for(let i=0; i <voterCount; i++){
+                assert.equal(resultArray[i],false,'passed');
+            }
         });
-    });*/
+    });
 });
