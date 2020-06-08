@@ -1,11 +1,6 @@
 import React, {useState} from 'react';
 import {
   Collapse,
-  Button,
-  Modal, 
-  ModalHeader, 
-  ModalBody, 
-  ModalFooter,
   Navbar,
   Media,
   NavbarToggler,
@@ -13,11 +8,6 @@ import {
   Nav,
   NavItem,
   NavLink,
-  Form,
-  FormGroup,
-  Label,
-  FormText,
-  Input
 } from 'reactstrap';
 
 import { Link } from 'react-router-dom';
@@ -25,9 +15,6 @@ import { Link } from 'react-router-dom';
 const Navigation = (props) => {
   const [isOpen, setIsOpen] = useState(false);
   const nav_toggle = () => setIsOpen(!isOpen);
-
-  const [modal, setModal] = useState(false);
-  const modal_toggle = () => setModal(!modal);
 
     return (
        <div>

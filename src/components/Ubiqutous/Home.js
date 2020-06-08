@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import styles from './App.css';
-import banner from './img/banner.jpg'
+
 import { 
   Jumbotron,
   Carousel,

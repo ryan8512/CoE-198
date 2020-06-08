@@ -103,7 +103,6 @@ class Vote extends Component{
                     innerRef={(input) => { this.firstName = input }}
                     className="form-control"
                     placeholder="First Name"
-                    className = "col-6"
                     required />
 
                     <Input
@@ -112,7 +111,6 @@ class Vote extends Component{
                     innerRef={(input) => { this.lastName = input }}
                     className="form-control"
                     placeholder="Last Name"
-                    className = "col-6"
                     required />
                   </Row>
                   <FormText color="muted" className="text-center">

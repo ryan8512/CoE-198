@@ -10,7 +10,7 @@ const Footer = () => {
         <footer className="container-fluid text-left">
           <div className="row py-3">
             <div className="col-sm-4 text-center">
-              <img src={require("./img/navbar_Logo.jpg")}></img>
+              <img src={require("./img/navbar_Logo.jpg")} alt="logo not found"/>
             </div>
             <div className="col-sm-4">
               <div className="short-div"> <h5> Powered By </h5> </div>

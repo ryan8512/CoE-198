@@ -11,7 +11,7 @@ const voterCount = 204;
 ///////////////////////
 /*AVOID ODD NUMBERS DUE TO DIVIDE BY 2*/
 
-contract('SetupBlockchain + Registration + Election',(accounts) => {
+contract.skip('SetupBlockchain + Registration + Election',(accounts) => {
     let Registration,SetupBlockchain,Election,Results,setupBlockchainAddress, registrationAddress, electionAddress,resultsAddress;
     
     /*!!!!!!!!!!!!!!!!!!!!!! SetupBlockchain*/

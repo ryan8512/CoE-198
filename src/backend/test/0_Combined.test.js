@@ -3,7 +3,7 @@ const SETUPBLOCKCHAIN = artifacts.require('./SetupBlockchain.sol');
 const REGISTRATION = artifacts.require('./Registration.sol');
 const RESULTS = artifacts.require('./Results.sol');
 
-contract.skip('SetupBlockchain + Registration + Election',(accounts) => {
+contract('SetupBlockchain + Registration + Election',(accounts) => {
     let Registration,SetupBlockchain,Election,Results,setupBlockchainAddress, registrationAddress, electionAddress,resultsAddress;
     
     /*!!!!!!!!!!!!!!!!!!!!!! SetupBlockchain*/
@@ -220,18 +220,18 @@ contract.skip('SetupBlockchain + Registration + Election',(accounts) => {
         });
     });
     
-    
     describe('registerVoter function',async () => {
         let result4,result5,result6,result7;
         let resultArray = [];
         before(async() => {
+            /*
             for(let i=0;i<3;i++){
                 resultArray[i] = await Registration.registerVoter(
                     "Voter"+(i+1),
                     "NCR",
                     { from: accounts[i+1] }
                 );
-            }
+            }*/
             result4 = await Registration.registerVoter(
                 "Duterte",
                 "NCR",
@@ -256,7 +256,7 @@ contract.skip('SetupBlockchain + Registration + Election',(accounts) => {
             );
 
         })
-
+        /*
         for(let i=1;i<=3;i++){
             it('Voter '+i+' registered', async () => {
                 const event = (resultArray[i-1]).logs[0].args;
@@ -264,7 +264,7 @@ contract.skip('SetupBlockchain + Registration + Election',(accounts) => {
                 assert.equal(event[1],true);
                 assert.equal(event[2],"NCR");
             });
-        }
+        }*/
         
         it('Duterte registered', async () => {
             const event = result4.logs[0].args;
@@ -294,7 +294,7 @@ contract.skip('SetupBlockchain + Registration + Election',(accounts) => {
             assert.equal(event[2],"NCR");
         });
     });
-    
+
     //!!!!!!!!!!!!!!!!!!!!!!!!Election
     
     describe('applySetup function', async () =>{
@@ -320,7 +320,7 @@ contract.skip('SetupBlockchain + Registration + Election',(accounts) => {
             assert.equal(event[0],registrationAddress, 'address is correct');
         });
     });
-    
+    /*
     describe('getNationalCandidates and getLocalCandidates function', async () =>{
         let result1,result2;
         before(async () => {
@@ -387,7 +387,7 @@ contract.skip('SetupBlockchain + Registration + Election',(accounts) => {
             assert.equal(result6,false,'passed');
             assert.equal(result7,false,'passed');
         });
-    });
+    });*/
     //!!!!!!!!!!!!!!!!!!!!!!!!!Results
     describe('applySetup function', async () =>{
         let result;
@@ -400,7 +400,7 @@ contract.skip('SetupBlockchain + Registration + Election',(accounts) => {
             assert.equal(event[0],setupBlockchainAddress, 'address is correct');
         });
     });
-    
+    /*
     describe('{President} getWinnerName and getWinnerVotes function', async () =>{
         let name,votes;
         before(async () => {
@@ -435,7 +435,7 @@ contract.skip('SetupBlockchain + Registration + Election',(accounts) => {
         it('Isko Vote Count', async () =>{
             assert.equal(votes,5, 'voteCount is correct');
         });
-    });
+    });*/
 
     
     
