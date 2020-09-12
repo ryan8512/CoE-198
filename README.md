@@ -3,7 +3,7 @@ Blockchain Election
 
 # Content Description
 
-Folder Conctents and Descriptions
+Folder Contents and Descriptions
 1. migrations - JS Files for migration/deployment for testing framework
 2. public - ReactJS Framework
 3. src - Source Files for contracts and compiled codes; Front end UI
@@ -32,7 +32,7 @@ Backend
 4. Web3.js - Libraries for connecting browser and blockchain
 5. Metamask - uses Web3.js to build a wallet software/browser for ease of use
 
-# Programming Language Required
+# Programming Languages Required
 1. HTML
 2. CSS
 3. Javascript
